@@ -1,0 +1,10 @@
+.styles1 {
+  color: blue;
+  margin: 40px;
+  border: 5px dotted pink;
+}
+
+.styles1_content {
+  font-size: 45px;
+  text-align: center;
+}
