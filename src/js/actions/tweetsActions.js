@@ -10,7 +10,9 @@ export function fetchTweets() {
       - change "reacttest" below to any other username
       - post some tweets to http://rest.learncode.academy/api/yourusername/tweets
     */
-    axios.get("https://www.omdbapi.com/?t=sport&apikey=40e9cece")
+    // axios.get("https://www.omdbapi.com/?t=sport&apikey=40e9cece")
+      // axios.get("https://api.sendwyre.com/v2/rates")
+      axios.get("https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC,XRP,BCH,EOS,XLM,USDT&tsyms=USD")
       .then((response) => {
         dispatch({type: "FETCH_TWEETS_FULFILLED", payload: response.data})
       })

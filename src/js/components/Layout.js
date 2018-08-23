@@ -7,7 +7,7 @@ import { fetchTweets } from "../actions/tweetsActions"
 
 
 import { Button, Navbar, FormGroup, FormControl, Text, Image, Thumbnail } from 'react-bootstrap';
-import { Nav, NavItem, NavDropdown, MenuItem, InputGroup, Row, Col } from 'react-bootstrap';
+import { Nav, NavItem, NavDropdown, MenuItem, InputGroup, Row, Col, Grid, DropdownButton } from 'react-bootstrap';
 // import './styles1.css';
 
 
@@ -21,11 +21,12 @@ import { Nav, NavItem, NavDropdown, MenuItem, InputGroup, Row, Col } from 'react
 })
 export default class Layout extends React.Component {
   // const WyreClient = require('wyre-api').WyreClient
+    // const WyreClient = require('wyre-api').WyreClient
 
   componentDidMount() {
     // console.log("Hello----------------------------")
 
-    // const WyreClient = require('wyre-api').WyreClient
+
 
     // import {WyreClient} from 'wyre-api'
     // var WyreClient = "https://api.testwyre.com";
@@ -51,6 +52,7 @@ export default class Layout extends React.Component {
     //         // .. error
     //         console.log("Error--------------------")
     //     })
+
   }
 
   componentWillMount() {
@@ -79,7 +81,7 @@ export default class Layout extends React.Component {
 
     // console.log("-------------------")
     // console.log(fetchTweets())
-    // console.log(tweets)
+    // console.log(tweets.ETH)
 
 
     // if (tweets.length > 0) {
@@ -87,38 +89,183 @@ export default class Layout extends React.Component {
     // }
 
     const imgStyle = {
-      width: '50%',
+      width: '80%',
       height: 'auto'
     };
 
-    const mappedTweets = function(tweets) {
-      let arr = [];
-
-      for(var key in tweets) {
-          arr.push(key + ": " + tweets[key])
-      }
-
-      const mappedTweets = arr.map(tweet => <li key={tweet}>{tweet}</li>);
-
-      return mappedTweets;
+    const testStyle = {
+      backgroundColor: "red"
     }
 
-    const mapUsers = function(user) {
-      const people = user.map((
-        element, index) =>
+    const modelStyle = {
+      padding: "0 50px 0 30px"
+    }
 
-        <div>
-        <Image key={element.picture} src={element.picture} style={imgStyle} alt="W3Schools.com" />
-        <p key={index}>{element.name} < br></ br>
-        {element.age} < br></ br>
-        {element.picture}</ p>
-        </div>);
+    const mileageStyle = {
+      margin: "0"
+    }
 
-      return people;
+    const footerNavStyle = {
+      padding: "30px 0 0 0",
+      margin: "0"
+    }
+
+    const carYearStyle = {
+      padding: "0 10px 0 0"
+    }
+
+
+    const mappedTweets2 = function(tweets) {
+        let arr = [];
+
+        for(var key in tweets) {
+            arr.push(" | " + key + ": " + tweets[key].USD)
+        }
+
+        // const mappedTweets = arr.map(tweet => <li key={tweet}>{tweet}</li>);
+
+        return arr;
+      }
+
+    // const mappedTweets2 = function(tweets) {
+    //     let str = "";
+    //
+    //     for(var key in tweets) {
+    //         str +=  key + ": " + tweets[key].USD + " --- "
+    //     }
+    //
+    //     // const mappedTweets = arr.map(tweet => <li key={tweet}>{tweet}</li>);
+    //
+    //     return str;
+    //   }
+
+
+    // const mappedTweets = function(tweets) {
+    //   let arr = [];
+    //   let trackCoinRate = ['USDETH', 'USDBTC', 'USDDAI', 'USDEUR']
+    //
+    //   for(var key in tweets) {
+    //     if(trackCoinRate.includes(key))
+    //       arr.push(key + ": $" + tweets[key].toFixed(2))
+    //   }
+    //
+    //   const mappedTweets = arr.map((tweet, index) => <li key={index.toString()}>{tweet}</li>);
+    //
+    //   return mappedTweets;
+    // }
+
+    const usdToEther = function(cryptoRateObj, carPrice) {
+      let cryptoObj = cryptoRateObj.ETH;
+      let etherPrice = 0;
+
+      for(let key in cryptoObj) {
+        // console.log("----------------")
+        // console.log(cryptoObj[key])
+        if(key === "USD") {
+          etherPrice = parseInt(carPrice) / parseInt(cryptoObj[key]);
+        }
+      }
+      return etherPrice.toFixed(2);
+    }
+
+    // const usdToEther = function(cryptoRateObj, carPrice) {
+    //   let cryptoObj = cryptoRateObj.ETH.USD;
+    //   let cryptoRate = cryptoRateObj.ETH.USD;
+    //
+    //
+    //   return parseInt(carPrice) / parseInt(cryptoRate);
+    // }
+
+
+    const mapUsers2 = function(user, tweets) {
+      let arr = [];
+
+      for(let i = 0; i < user.length - 1; i++) {
+        let element = user[i];
+        let nextElement = user[i + 1];
+        let carPrice = element.price;
+        let carPrice2 = nextElement.price;
+
+        let etherPrice = usdToEther(tweets, carPrice);
+        let etherPrice2 = usdToEther(tweets, carPrice2);
+
+        arr.push(
+          <div>
+          <Grid>
+
+            <Row className="show-grid">
+              <Col md={6} mdPush={6}>
+                  <Row xs={4} md={2}>
+                    <Image key={element.picture} src={element.picture} style={imgStyle} alt="Car" />
+                    </Row>
+                  <Row style={modelStyle} xs={4} md={2}>
+                      <Col xs={12} md={8}>
+                          <p key={i}>{element.model}</p>
+                      </Col>
+                      <Col xs={6} md={4}>
+                          <p key={i}>{etherPrice2} Ether</p>
+                      </Col>
+                  </Row>
+                  <Row style={modelStyle} xs={4} md={2}>
+                      <Col xs={6} md={4}>
+                          <p key={i}><strong style={carYearStyle} key={i}>{element.year}</strong> {element.mile}k miles</p>
+
+
+                      </Col>
+                      <Col style={mileageStyle} xs={6} md={4}>
+
+                      </Col>
+                      <Col xsHidden md={4}>
+                            <p key={i}>${element.price}</p>
+
+                       </Col>
+                  </Row>
+              </Col>
+
+
+              <Col md={6} mdPull={6}>
+                  <Row xs={2} md={2}>
+                    <Image key={nextElement.picture} src={nextElement.picture} style={imgStyle} alt="Car" />
+                  </Row>
+                  <Row style={modelStyle} xs={2} md={2}>
+                      <Col xs={12} md={8}>
+                          <p key={i}>{nextElement.model}</p>
+                      </Col>
+                      <Col xs={6} md={4}>
+                          <p key={i}>{etherPrice2} Ether</p>
+                      </Col>
+                  </Row>
+                  <Row style={modelStyle} xs={2} md={2}>
+                      <Col xs={6} md={4}>
+                          <p key={i}><strong style={carYearStyle} key={i}>{nextElement.year}</strong> {nextElement.mile}k miles</p>
+
+                      </Col>
+                      <Col style={mileageStyle} xs={6} md={4}>
+
+                      </Col>
+                      <Col xsHidden md={4}>
+                         <p key={i}>${nextElement.price}</p>
+                       </Col>
+
+
+                  </Row>
+              </Col>
+            </Row>
+          </Grid>
+
+          </div>);
+      }
+
+      return arr;
     }
 
     const divStyle = {
       color: 'white'
+    };
+
+    const acceptEtherStyle = {
+      color: 'white',
+      padding: "10px 0 0 10px"
     };
 
     const searchStyle = {
@@ -129,15 +276,52 @@ export default class Layout extends React.Component {
       padding: "0px 20px 20px 20px"
     }
 
+    const cryptoStyle = {
+      backgroundColor: "#e0ac02",
+      padding: "5px"
+    }
+
+    const submitStyle = {
+      backgroundColor: "#e0ac02",
+    }
+
+    const navbarStyle = {
+      margin: "0 0 0 0",
+      padding: "10px 0 0 0"
+    }
+
+    const liveStyle = {
+      color: "red"
+    }
+
+    const carMenuStyle = {
+      // backgroundColor: "green",
+      textAlign: "left"
+    }
+
+    const accountMenuStyle = {
+      // backgroundColor: "green",
+      textAlign: "right"
+    }
+
+    const getToKnowStyle = {
+      color: "white",
+      margin: "0 0 10px 0"
+    }
+
+    const careerStyle = {
+      color: "white",
+      // margin: "0 0 10px 0"
+    }
 
     return(
       <div>
 
-      <Navbar>
+      <Navbar style={navbarStyle}>
         <Navbar.Header>
 
           <Navbar.Brand>
-            <a href="">SAIGON MARKETPLACE</a>
+            <a href="">DREAM MARKETPLACE</a>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
@@ -146,47 +330,134 @@ export default class Layout extends React.Component {
             <FormGroup>
 
             <InputGroup>
-              <InputGroup.Addon>All</InputGroup.Addon>
               <FormControl style={searchStyle} placeholder="Search" type="text" />
              </InputGroup>
 
             </FormGroup>{' '}
-            <Button type="submit">Submit</Button>
+            <Button style={submitStyle} type="submit">Submit</Button>
+
           </Navbar.Form>
+            <p style={acceptEtherStyle}>We accept Ether</p>
+
         </Navbar.Collapse>
 
         <Row className="show-grid">
-          <Col xs={4} md={2}>
-            <Button style={divStyle}>Location</Button>
+          <Col style={carMenuStyle} xs={12} md={8}>
+            <Button style={divStyle}>Cars</Button>
+            <Button style={divStyle}>Houses</Button>
+            <Button style={divStyle}>Phones</Button>
+            <Button style={divStyle}>Jewelries</Button>
+            <Button style={divStyle}>Shoes</Button>
           </Col>
-          <Col xs={4} md={2}>
-            <Button style={divStyle}>Department</Button>
-          </Col>
-          <Col xs={4} md={2}>
-            <Button style={divStyle}>Browsing History</Button>
-          </Col>
-          <Col xs={4} md={2}>
-            <Button style={divStyle}>Account & List</Button>
-          </Col>
-          <Col xs={4} md={2}>
+          <Col style={accountMenuStyle} xs={6} md={4}>
+            <DropdownButton title="Account" id="bg-nested-dropdown">
+                <MenuItem eventKey="1">Sell</MenuItem>
+                <MenuItem eventKey="2">Wyre Payment</MenuItem>
+                <MenuItem eventKey="3">MakerDOA</MenuItem>
+            </DropdownButton>
             <Button style={divStyle}>Order</Button>
-          </Col>
-          <Col xs={4} md={2}>
             <Button style={divStyle}>Cart</Button>
           </Col>
+
         </Row>
 
+
+
+
       </Navbar>
+      <div style={cryptoStyle}>
+          <center>
+          <p><strong style={liveStyle}>Live</strong> {mappedTweets2(tweets)}</p>
+          </center>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         <div style={listingStyle}>
-
-          {mapUsers(user)}
-
+          {mapUsers2(user, tweets)}
         </div>
 
 
-        <ul>{mappedTweets(tweets)}</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <Navbar style={footerNavStyle}>
+            <Grid>
+               <Row className="show-grid">
+                 <Col sm={6} md={4}>
+                      <p style={getToKnowStyle}><strong>Get to Know Us</strong></p>
+                      <p><a style={careerStyle}>Career</a></p>
+                      <p><a style={careerStyle}>About Dream Marketplace</a></p>
+                      <p><a style={careerStyle}>Investor Relations</a></p>
+                      <p><a style={careerStyle}>DM Devices</a></p>
+                   <br />
+
+                 </Col>
+                 <Col sm={6} md={4}>
+                    <p style={getToKnowStyle}><strong style={getToKnowStyle}>Make Money with Us</strong></p>
+                    <p><a style={divStyle}>Sell on Dream Marketplace</a></p>
+                    <p><a style={divStyle}>Sell you items on DM</a></p>
+                    <p><a style={divStyle}>Become an Affiliate</a></p>
+                    <p><a style={divStyle}>Advertise Your Products</a></p>
+                    <p><a style={divStyle}>Self-Publish with Us</a></p>
+                   <br />
+
+                 </Col>
+                 <Col sm={6} md={4}>
+                    <p style={getToKnowStyle}><strong style={getToKnowStyle}>Let Us Help You</strong></p>
+                    <p><a style={divStyle}>Your Account</a></p>
+                    <p><a style={divStyle}>Your Order</a></p>
+                    <p><a style={divStyle}>Shipping Rates & Policies</a></p>
+                    <p><a style={divStyle}>DM Assistant</a></p>
+                    <p><a style={divStyle}>Help</a></p>
+                   <br />
+
+                 </Col>
+               </Row>
+              </Grid>
+                <center><p style={divStyle}>Copyright 2018 Patrick Luu</p></center>
+
+          </Navbar>
+
+
 
       </ div>
     )
@@ -205,6 +476,57 @@ export default class Layout extends React.Component {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+//
+// <Row className="show-grid">
+//   <Col md={6} mdPush={6}>
+//       <Row xs={4} md={2}>
+//         <Image key={element.picture} src={element.picture} style={imgStyle} alt="Car" />
+//         </Row>
+//       <Row style={modelStyle} xs={4} md={2}>
+//           <Col xs={12} md={8}>
+//               <p key={i}>{element.model}</p>
+//           </Col>
+//           <Col xs={6} md={4}>
+//               <p key={i}>Ether 100</p>
+//           </Col>
+//       </Row>
+//       <Row style={modelStyle} xs={4} md={2}>
+//           <Col xs={6} md={4}>
+//               <strong key={i}>{element.year}</strong>
+//
+//           </Col>
+//           <Col style={mileageStyle} xs={6} md={4}>
+//               <p key={i}>{element.mile}k miles</p>
+//           </Col>
+//           <Col xsHidden md={4}>
+//                 <p key={i}>${element.price}</p>
+//
+//            </Col>
+//       </Row>
+//   </Col>
+
+
+
+
+
+
+
+
+
+
+        // <ul>{mappedTweets(tweets)}</ul>
 
 
 // <h1>Name: {user[1].name}</h1>
@@ -229,7 +551,7 @@ export default class Layout extends React.Component {
 
 
 
-
+        // <ul>{mappedTweets2(tweets)}</ul>
 
 
 
