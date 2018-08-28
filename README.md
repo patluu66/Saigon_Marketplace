@@ -18,6 +18,7 @@ Dream Marketplace is an app that allow users to buy and sell listed item with cr
 ### How to Use
 
 npm install
+
 npm run dev
 
 ### How it works.
